@@ -14,11 +14,6 @@ export default function LoginPage() {
         setLoading(true);
         setError('');
 
-        // Enforce specific admin password only in code
-        // Note: The user specified 'Semin@123' in the first message and 'Semini@123' in the second.
-        // I will use 'Semin@123' as it matches the first prompt and the implementation plan,
-        // but I'll also check if they meant 'Semini@123' if it fails. 
-        // Actually, looking at the last prompt: "same as Semini@123". I will use 'Semini@123' now.
         if (password === 'Semini@123') {
             sessionStorage.setItem('adminAuthenticated', 'true');
             router.push('/');
