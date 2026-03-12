@@ -14,8 +14,13 @@ export default function LoginPage() {
         setLoading(true);
         setError('');
 
-        if (password === 'Semini@123') {
+        if (password === 'Ranova@123') {
             sessionStorage.setItem('adminAuthenticated', 'true');
+            sessionStorage.setItem('superAdminAuthenticated', 'true');
+            router.push('/');
+        } else if (password === 'Semini@123') {
+            sessionStorage.setItem('adminAuthenticated', 'true');
+            sessionStorage.setItem('superAdminAuthenticated', 'false');
             router.push('/');
         } else {
             setError('Invalid master password');

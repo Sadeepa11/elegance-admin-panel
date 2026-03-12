@@ -1,5 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
 
 const firebaseConfig = {
@@ -14,9 +15,10 @@ const firebaseConfig = {
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const db = getFirestore(app);
+const rtdb = getDatabase(app);
 const auth = getAuth(app);
 
 // Set persistence to session (logout when tab/window is closed)
 setPersistence(auth, browserSessionPersistence);
 
-export { app, db, auth };
+export { app, db, rtdb, auth };
