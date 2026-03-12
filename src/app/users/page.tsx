@@ -27,51 +27,66 @@ export default function UsersPage() {
     }, []);
 
     return (
-        <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-semibold text-gray-900">Registered Users</h1>
+        <div className="space-y-10 animate-in fade-in duration-1000">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <div className="flex items-center space-x-2 mb-2">
+                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+                        <span className="text-[10px] font-bold tracking-[0.3em] text-primary uppercase">Identity Manager</span>
+                    </div>
+                    <h1 className="text-4xl font-black text-foreground tracking-tighter">Registered Personnel</h1>
+                    <p className="text-muted-foreground text-sm font-medium mt-1">Full database of authenticated system users.</p>
+                </div>
             </div>
 
-            <div className="bg-white shadow-sm rounded-xl border border-gray-100 overflow-hidden">
+            <div className="premium-card shadow-xl shadow-primary/5">
                 {loading ? (
-                    <div className="p-12 flex justify-center">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    <div className="p-24 flex flex-col items-center justify-center gap-4">
+                        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest animate-pulse">Syncing Database...</p>
                     </div>
                 ) : users.length === 0 ? (
-                    <div className="p-12 text-center text-gray-500">No users found.</div>
+                    <div className="p-24 text-center">
+                        <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-6">
+                            <UserCircle className="h-10 w-10 text-muted-foreground opacity-30" />
+                        </div>
+                        <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest">No Records Found</p>
+                    </div>
                 ) : (
                     <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                        <table className="min-w-full divide-y divide-border">
+                            <thead className="bg-muted/30">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
+                                    <th className="px-8 py-5 text-left text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Personnel Identity</th>
+                                    <th className="px-8 py-5 text-left text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Contact Vector</th>
+                                    <th className="px-8 py-5 text-left text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Primary Phone</th>
+                                    <th className="px-8 py-5 text-left text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Geographic Deployment</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
+                            <tbody className="divide-y divide-border">
                                 {users.map((user) => (
-                                    <tr key={user.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                    <tr key={user.id} className="hover:bg-primary/5 transition-all duration-300 group">
+                                        <td className="px-8 py-6 whitespace-nowrap">
                                             <div className="flex items-center">
-                                                <div className="flex-shrink-0 h-10 w-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-500">
+                                                <div className="flex-shrink-0 h-12 w-12 flex items-center justify-center rounded-2xl bg-muted text-primary border border-border group-hover:bg-primary/10 transition-colors">
                                                     <UserCircle className="w-6 h-6" />
                                                 </div>
-                                                <div className="ml-4">
-                                                    <div className="text-sm font-medium text-gray-900">{user.name || 'N/A'}</div>
-                                                    <div className="text-sm text-gray-500">ID: {user.id}</div>
+                                                <div className="ml-5">
+                                                    <div className="text-sm font-black text-foreground tracking-tight">{user.name || 'Anonymous User'}</div>
+                                                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter opacity-60">ID: {user.id.substring(0, 12)}...</div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {user.email || 'N/A'}
+                                        <td className="px-8 py-6 whitespace-nowrap">
+                                            <div className="text-sm font-medium text-foreground">{user.email || 'N/A'}</div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {user.phone || 'N/A'}
+                                        <td className="px-8 py-6 whitespace-nowrap">
+                                            <div className="text-sm font-medium text-foreground">{user.phone || 'N/A'}</div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 truncate max-w-[200px]">
-                                            {user.address || 'N/A'}
+                                        <td className="px-8 py-6 whitespace-nowrap">
+                                            <div className="text-sm text-muted-foreground truncate max-w-[250px] font-medium" title={user.address}>
+                                                {user.address || 'N/A'}
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

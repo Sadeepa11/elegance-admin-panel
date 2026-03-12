@@ -15,7 +15,7 @@ const firebaseConfig = {
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const db = getFirestore(app);
-const rtdb = getDatabase(app);
+const rtdb = getDatabase(app, process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL);
 const auth = getAuth(app);
 
 // Set persistence to session (logout when tab/window is closed)

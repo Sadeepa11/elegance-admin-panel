@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, ShoppingBag, Tags, Users, LogOut, ClipboardList, Image as ImageIcon } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Tags, Users, LogOut, ClipboardList, Image as ImageIcon, Sun, Moon, ChevronRight } from 'lucide-react';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useTheme } from '@/context/ThemeContext';
 
 const navigation = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -18,6 +19,7 @@ const navigation = [
 export default function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
+    const { theme, toggleTheme } = useTheme();
     const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
     useEffect(() => {
@@ -37,68 +39,101 @@ export default function Sidebar() {
     };
 
     return (
-        <div className="flex flex-col w-64 bg-white border-r h-full shadow-sm">
-            <div className="flex items-center justify-center h-16 border-b">
-                <h1 className="text-xl font-bold text-gray-800 tracking-tight">Elegance Admin</h1>
+        <div className="flex flex-col w-72 glass-panel border-r h-full relative transition-[width] duration-300">
+            <div className="flex items-center px-6 h-20 border-b border-white/10">
+                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center mr-3 shadow-lg shadow-primary/20">
+                    <span className="text-white font-bold text-lg">E</span>
+                </div>
+                <h1 className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+                    Elegance
+                </h1>
             </div>
-            <div className="flex-1 overflow-y-auto py-4">
-                <nav className="space-y-1 px-2">
-                    {navigation.map((item) => {
-                        const isActive = pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href));
-                        return (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className={`
-                  group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors
-                  ${isActive
-                                        ? 'bg-blue-50 text-blue-700'
-                                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
-                `}
-                            >
-                                <item.icon
-                                    className={`
-                    mr-3 flex-shrink-0 h-5 w-5 transition-colors
-                    ${isActive ? 'text-blue-700' : 'text-gray-400 group-hover:text-gray-500'}
-                  `}
-                                    aria-hidden="true"
-                                />
-                                {item.name}
-                            </Link>
-                        );
-                    })}
 
-                    {isSuperAdmin && (
-                        <Link
-                            href="/media"
-                            className={`
-                group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors
-                ${pathname?.startsWith('/media')
-                                    ? 'bg-purple-50 text-purple-700'
-                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
-              `}
-                        >
-                            <ImageIcon
+            <div className="flex-1 overflow-y-auto py-6 px-4 space-y-8">
+                <div>
+                    <p className="px-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-4">Main Menu</p>
+                    <nav className="space-y-1">
+                        {navigation.map((item) => {
+                            const isActive = pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href));
+                            return (
+                                <Link
+                                    key={item.name}
+                                    href={item.href}
+                                    className={`
+                                        group flex items-center justify-between px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200
+                                        ${isActive
+                                            ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
+                                            : 'text-muted-foreground hover:bg-white/5 hover:text-foreground'}
+                                    `}
+                                >
+                                    <div className="flex items-center">
+                                        <item.icon
+                                            className={`
+                                                mr-3 flex-shrink-0 h-5 w-5 transition-colors
+                                                ${isActive ? 'text-primary-foreground' : 'text-muted-foreground group-hover:text-foreground'}
+                                            `}
+                                        />
+                                        {item.name}
+                                    </div>
+                                    {isActive && <ChevronRight className="h-4 w-4" />}
+                                </Link>
+                            );
+                        })}
+                    </nav>
+                </div>
+
+                {isSuperAdmin && (
+                    <div>
+                        <p className="px-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-4">Admin Extensions</p>
+                        <nav className="space-y-1">
+                            <Link
+                                href="/media"
                                 className={`
-                  mr-3 flex-shrink-0 h-5 w-5 transition-colors
-                  ${pathname?.startsWith('/media') ? 'text-purple-700' : 'text-gray-400 group-hover:text-gray-500'}
-                `}
-                                aria-hidden="true"
-                            />
-                            Media Gallery
-                        </Link>
-                    )}
-                </nav>
-            </div>
-            <div className="flex-shrink-0 flex border-t p-4">
-                <button
-                    className="flex-shrink-0 w-full group block text-gray-600 hover:text-gray-900 transition-colors"
-                    onClick={handleLogout}
-                >
-                    <div className="flex items-center">
-                        <LogOut className="inline-block h-5 w-5 mr-3 text-gray-400 group-hover:text-gray-500" />
-                        <div className="text-sm font-medium">Sign Out</div>
+                                    group flex items-center justify-between px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200
+                                    ${pathname?.startsWith('/media')
+                                        ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
+                                        : 'text-muted-foreground hover:bg-white/5 hover:text-foreground'}
+                                `}
+                            >
+                                <div className="flex items-center">
+                                    <ImageIcon
+                                        className={`
+                                            mr-3 flex-shrink-0 h-5 w-5 transition-colors
+                                            ${pathname?.startsWith('/media') ? 'text-primary-foreground' : 'text-muted-foreground group-hover:text-foreground'}
+                                        `}
+                                    />
+                                    Media Gallery
+                                </div>
+                                {pathname?.startsWith('/media') && <ChevronRight className="h-4 w-4" />}
+                            </Link>
+                        </nav>
                     </div>
+                )}
+            </div>
+
+            <div className="p-4 space-y-2 border-t border-white/10">
+                <button
+                    onClick={toggleTheme}
+                    className="flex items-center w-full px-4 py-3 text-sm font-medium text-muted-foreground rounded-xl hover:bg-white/5 hover:text-foreground transition-all duration-200 group"
+                >
+                    <div className="bg-muted p-2 rounded-lg mr-3 group-hover:bg-primary/10 transition-colors">
+                        {theme === 'light' ? (
+                            <Moon className="h-4 w-4 text-primary" />
+                        ) : (
+                            <Sun className="h-4 w-4 text-primary" />
+                        )}
+                    </div>
+                    {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+                </button>
+
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center w-full px-4 py-3 text-sm font-medium text-red-500/80 rounded-xl hover:bg-red-500/10 hover:text-red-500 transition-all duration-200"
+                >
+                    <div className="bg-red-500/10 p-2 rounded-lg mr-3">
+                        <LogOut className="h-4 w-4" />
+                    </div>
+                    Sign Out
                 </button>
             </div>
         </div>

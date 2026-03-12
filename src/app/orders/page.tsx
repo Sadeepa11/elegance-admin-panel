@@ -111,12 +111,12 @@ export default function OrdersPage() {
     const getStatusStyles = (status: string) => {
         switch (status) {
             case 'Completed':
-                return 'bg-green-100 text-green-800 border-green-200';
+                return 'bg-green-500/10 text-green-500 border-green-500/20';
             case 'Cancelled':
-                return 'bg-red-100 text-red-800 border-red-200';
+                return 'bg-red-500/10 text-red-500 border-red-500/20';
             case 'Processing':
             default:
-                return 'bg-blue-100 text-blue-800 border-blue-200';
+                return 'bg-primary/10 text-primary border-primary/20';
         }
     };
 
@@ -134,101 +134,121 @@ export default function OrdersPage() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6">
+                <div className="relative">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="h-2 w-2 bg-primary rounded-full animate-pulse"></div>
+                    </div>
+                </div>
+                <p className="text-muted-foreground font-bold tracking-widest uppercase text-[10px] animate-pulse">Syncing Orders...</p>
             </div>
         );
     }
 
     return (
-        <div className="p-6">
-            <div className="mb-6 flex justify-between items-center">
-                <h1 className="text-2xl font-bold text-gray-900">Order Management</h1>
-                <div className="text-sm text-gray-500 bg-white px-4 py-2 rounded-lg shadow-sm border">
-                    Total Orders: <span className="font-bold text-gray-900">{orders.length}</span>
+        <div className="space-y-10 animate-in fade-in duration-1000">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <div className="flex items-center space-x-2 mb-2">
+                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+                        <span className="text-[10px] font-bold tracking-[0.3em] text-primary uppercase">Fulfillment Engine</span>
+                    </div>
+                    <h1 className="text-4xl font-black text-foreground tracking-tighter">Order Management</h1>
+                    <p className="text-muted-foreground text-sm font-medium mt-1">Real-time status tracking and administrative control.</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                     <div className="px-5 py-3 glass-panel rounded-2xl flex items-center shadow-sm">
+                        <Package className="w-4 h-4 text-primary mr-3" />
+                        <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest mr-3">Total Cycles:</span>
+                        <span className="text-lg font-black text-foreground">{orders.length}</span>
+                     </div>
                 </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+            <div className="premium-card relative overflow-visible">
+                <div className="overflow-x-auto min-h-[400px]">
+                    <table className="min-w-full divide-y divide-border">
+                        <thead className="bg-muted/30">
                             <tr>
-                                <th scope="col" className="w-10 px-6 py-4"></th>
-                                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Order ID</th>
-                                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer Info</th>
-                                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Amount</th>
-                                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                                <th scope="col" className="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                                <th scope="col" className="w-14 px-6 py-5"></th>
+                                <th scope="col" className="px-6 py-5 text-left text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Date / Time</th>
+                                <th scope="col" className="px-6 py-5 text-left text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Transaction ID</th>
+                                <th scope="col" className="px-6 py-5 text-left text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Personnel / Delivery</th>
+                                <th scope="col" className="px-6 py-5 text-left text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Revenue</th>
+                                <th scope="col" className="px-6 py-5 text-left text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Classification</th>
+                                <th scope="col" className="px-6 py-5 text-right text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Administrative</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="divide-y divide-border">
                             {orders.length === 0 ? (
                                 <tr>
-                                    <td colSpan={7} className="px-6 py-12 text-center text-sm text-gray-500">
-                                        <Package className="mx-auto h-12 w-12 text-gray-300 mb-3" />
-                                        No orders found matching the global scope.
+                                    <td colSpan={7} className="px-6 py-24 text-center">
+                                        <div className="flex flex-col items-center">
+                                            <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-6">
+                                                <Package className="h-10 w-10 text-muted-foreground opacity-30" />
+                                            </div>
+                                            <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest">No Active Records Found</p>
+                                        </div>
                                     </td>
                                 </tr>
                             ) : orders.map((order) => (
                                 <React.Fragment key={order.orderId}>
-                                    {/* Primary Row */}
                                     <tr
-                                        className={`hover:bg-gray-50 transition-colors ${expandedRows.has(order.orderId) ? 'bg-gray-50' : ''}`}
+                                        className={`hover:bg-primary/5 transition-all duration-300 group ${expandedRows.has(order.orderId) ? 'bg-primary/[0.02]' : ''}`}
                                     >
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                        <td className="px-6 py-5 whitespace-nowrap">
                                             <button
                                                 onClick={() => toggleRow(order.orderId)}
-                                                className="text-gray-400 hover:text-gray-600 transition-colors focus:outline-none"
+                                                className="w-8 h-8 rounded-xl flex items-center justify-center bg-muted text-muted-foreground hover:bg-primary hover:text-white transition-all duration-300 shadow-sm"
                                             >
                                                 {expandedRows.has(order.orderId) ?
-                                                    <ChevronDown className="h-5 w-5" /> :
-                                                    <ChevronRight className="h-5 w-5" />
+                                                    <ChevronDown className="h-4 w-4" /> :
+                                                    <ChevronRight className="h-4 w-4" />
                                                 }
                                             </button>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm font-medium text-gray-900">
+                                        <td className="px-6 py-5 whitespace-nowrap">
+                                            <div className="text-sm font-black text-foreground tracking-tight">
                                                 {new Date(order.timestamp).toLocaleDateString()}
                                             </div>
-                                            <div className="text-xs text-gray-500 mt-1">
+                                            <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter mt-1 opacity-60">
                                                 {new Date(order.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm font-mono font-medium text-gray-900 bg-gray-100 px-2 py-1 rounded">
+                                        <td className="px-6 py-5 whitespace-nowrap">
+                                            <div className="px-3 py-1.5 rounded-xl bg-muted/50 text-[11px] font-black text-foreground border border-border inline-block tracking-widest uppercase">
                                                 #{order.orderId.substring(0, 8)}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
-                                            <div className="text-sm text-gray-900 max-w-xs truncate" title={order.userId}>
-                                                User: {order.userId.substring(0, 8)}...
+                                        <td className="px-6 py-5 max-w-xs">
+                                            <div className="text-sm font-black text-foreground truncate tracking-tight" title={order.userId}>
+                                                ID: {order.userId.substring(0, 12)}
                                             </div>
-                                            <div className="text-xs text-gray-500 mt-1 max-w-xs truncate" title={order.shippingAddress}>
-                                                {order.shippingAddress || "No address provided"}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm font-bold text-gray-900">
-                                                LKR {order.totalAmount?.toFixed(2)}
-                                            </div>
-                                            <div className="text-xs text-gray-500 mt-1">
-                                                {order.items?.length || 0} items • {order.paymentMethod}
+                                            <div className="text-[10px] font-medium text-muted-foreground mt-1 truncate opacity-80" title={order.shippingAddress}>
+                                                {order.shippingAddress || "N/A"}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusStyles(order.status || 'Processing')}`}>
+                                        <td className="px-6 py-5 whitespace-nowrap">
+                                            <div className="text-sm font-black text-foreground tracking-tighter">
+                                                LKR {order.totalAmount?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                            </div>
+                                            <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 opacity-60">
+                                                {order.items?.length || 0} Assets • {order.paymentMethod}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-5 whitespace-nowrap">
+                                            <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all duration-500 shadow-sm ${getStatusStyles(order.status || 'Processing')}`}>
                                                 {getStatusIcon(order.status || 'Processing')}
                                                 {order.status || 'Processing'}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <td className="px-6 py-5 whitespace-nowrap text-right text-sm">
                                             <select
                                                 value={order.status || 'Processing'}
                                                 onChange={(e) => order.parentPath && updateOrderStatus(order.parentPath, e.target.value, order.orderId, order.userId)}
                                                 disabled={updatingParams === order.parentPath}
-                                                className="block w-full rounded-md border-0 py-1.5 pl-3 pr-8 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 disabled:opacity-50"
+                                                className="inline-block w-36 px-4 py-2 bg-muted text-[11px] font-black uppercase tracking-widest text-foreground rounded-2xl border-none ring-1 ring-border focus:ring-2 focus:ring-primary transition-all disabled:opacity-50 cursor-pointer shadow-sm hover:bg-muted/80"
                                             >
                                                 <option value="Processing">Processing</option>
                                                 <option value="Completed">Completed</option>
@@ -237,41 +257,52 @@ export default function OrdersPage() {
                                         </td>
                                     </tr>
 
-                                    {/* Expanded Cart Details Row */}
+                                    {/* Expanded Details Row */}
                                     {expandedRows.has(order.orderId) && (
-                                        <tr className="bg-gray-50">
-                                            <td colSpan={7} className="px-6 py-4 border-t border-gray-100 pb-8">
-                                                <div className="ml-10">
-                                                    <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
-                                                        <Package className="w-4 h-4 mr-2" />
-                                                        Purchased Items List
+                                        <tr className="bg-muted/10 animate-in slide-in-from-top-2 duration-300">
+                                            <td colSpan={7} className="px-10 py-8 border-t border-border">
+                                                <div className="relative">
+                                                    <div className="absolute left-[-2rem] top-0 bottom-0 w-1 bg-primary/20 rounded-full"></div>
+                                                    <h4 className="text-xs font-black text-foreground uppercase tracking-[0.2em] mb-6 flex items-center">
+                                                        <Package className="w-4 h-4 mr-3 text-primary" />
+                                                        Asset Requisition Deployment List
                                                     </h4>
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                                         {order.items?.map((item, index) => (
-                                                            <div key={index} className="flex items-center bg-white p-3 rounded-lg border shadow-sm">
-                                                                <Image
-                                                                    src={item.imageUrl}
-                                                                    alt={item.name}
-                                                                    width={64}
-                                                                    height={64}
-                                                                    className="w-16 h-16 object-cover rounded-md border"
-                                                                    onError={(e) => { (e.target as HTMLImageElement).src = '/fallback.png' }}
-                                                                    unoptimized
-                                                                />
-                                                                <div className="ml-3 flex-1 min-w-0">
-                                                                    <p className="text-sm font-medium text-gray-900 truncate">
+                                                            <div key={index} className="flex items-center glass-panel p-5 rounded-[2rem] border-white/5 shadow-xl hover:scale-[1.02] transition-transform duration-300">
+                                                                <div className="relative">
+                                                                    <Image
+                                                                        src={item.imageUrl}
+                                                                        alt={item.name}
+                                                                        width={80}
+                                                                        height={80}
+                                                                        className="w-20 h-20 object-cover rounded-2xl shadow-2xl transition-transform"
+                                                                        onError={(e) => { (e.target as HTMLImageElement).src = '/fallback.png' }}
+                                                                        unoptimized
+                                                                    />
+                                                                    <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl"></div>
+                                                                </div>
+                                                                <div className="ml-5 flex-1 min-w-0">
+                                                                    <p className="text-sm font-black text-foreground truncate tracking-tight mb-1">
                                                                         {item.name}
                                                                     </p>
-                                                                    <div className="flex items-center mt-1 text-xs text-gray-500 space-x-2">
-                                                                        <span className="font-semibold text-gray-900">x{item.quantity}</span>
+                                                                    <div className="flex items-center text-[10px] font-bold text-muted-foreground uppercase tracking-widest gap-2">
+                                                                        <span className="text-primary">x{item.quantity}</span>
                                                                         <span>•</span>
-                                                                        <span>LKR {item.price.toFixed(2)}</span>
+                                                                        <span>LKR {item.price.toLocaleString()}</span>
                                                                     </div>
                                                                     {(item.size || item.color) && (
-                                                                        <div className="flex mt-1 text-xs text-gray-500">
-                                                                            {item.size && item.size !== 'Default' ? `Size: ${item.size}` : ''}
-                                                                            {item.size && item.color && item.size !== 'Default' && item.color !== 'Default' ? ' | ' : ''}
-                                                                            {item.color && item.color !== 'Default' ? `Color: ${item.color}` : ''}
+                                                                        <div className="flex mt-3 gap-2">
+                                                                            {item.size && item.size !== 'Default' && (
+                                                                                <span className="px-2 py-0.5 bg-muted rounded-md text-[9px] font-black text-foreground/60 uppercase">
+                                                                                    {item.size}
+                                                                                </span>
+                                                                            )}
+                                                                            {item.color && item.color !== 'Default' && (
+                                                                                <span className="px-2 py-0.5 bg-muted rounded-md text-[9px] font-black text-foreground/60 uppercase">
+                                                                                    {item.color}
+                                                                                </span>
+                                                                            )}
                                                                         </div>
                                                                     )}
                                                                 </div>
