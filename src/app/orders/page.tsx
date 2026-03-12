@@ -75,11 +75,26 @@ export default function OrdersPage() {
         setExpandedRows(newExpanded);
     };
 
-    const updateOrderStatus = async (orderPath: string, newStatus: string) => {
+    const updateOrderStatus = async (orderPath: string, newStatus: string, orderId: string, userId: string) => {
         try {
             setUpdatingParams(orderPath);
             const orderRef = doc(db, orderPath);
             await updateDoc(orderRef, { status: newStatus });
+
+            // Send notification
+            try {
+                const response = await fetch('/api/notifications/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, orderId, status: newStatus }),
+                });
+                const result = await response.json();
+                if (!result.success) {
+                    console.warn("Notification not sent:", result.message);
+                }
+            } catch (notifError) {
+                console.error("Failed to send notification:", notifError);
+            }
 
             // Refresh explicitly mapping current states
             setOrders(orders.map(order =>
@@ -211,7 +226,7 @@ export default function OrdersPage() {
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <select
                                                 value={order.status || 'Processing'}
-                                                onChange={(e) => order.parentPath && updateOrderStatus(order.parentPath, e.target.value)}
+                                                onChange={(e) => order.parentPath && updateOrderStatus(order.parentPath, e.target.value, order.orderId, order.userId)}
                                                 disabled={updatingParams === order.parentPath}
                                                 className="block w-full rounded-md border-0 py-1.5 pl-3 pr-8 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 disabled:opacity-50"
                                             >
