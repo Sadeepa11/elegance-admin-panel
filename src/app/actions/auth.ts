@@ -1,7 +1,7 @@
 'use server';
 
 export async function verifyMasterPassword(password: string) {
-    const adminPassword = process.env.MASTER_PASSWORD_ADMIN;
+    const adminPassword = "semini@123";
 
     if (!adminPassword) {
         console.error('Master password not configured in environment variables');
