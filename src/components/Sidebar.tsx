@@ -2,10 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, ShoppingBag, Tags, Users, LogOut, ClipboardList, Image as ImageIcon, Sun, Moon, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Tags, Users, LogOut, ClipboardList, Sun, Moon, ChevronRight } from 'lucide-react';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 
 const navigation = [
@@ -20,18 +19,11 @@ export default function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
     const { theme, toggleTheme } = useTheme();
-    const [isSuperAdmin, setIsSuperAdmin] = useState(false);
-
-    useEffect(() => {
-        const isSuper = sessionStorage.getItem('superAdminAuthenticated') === 'true';
-        setIsSuperAdmin(isSuper);
-    }, []);
 
     const handleLogout = async () => {
         try {
             await auth.signOut();
             sessionStorage.removeItem('adminAuthenticated');
-            sessionStorage.removeItem('superAdminAuthenticated');
             router.push('/login');
         } catch (error) {
             console.error('Error signing out:', error);
@@ -82,33 +74,6 @@ export default function Sidebar() {
                     </nav>
                 </div>
 
-                {isSuperAdmin && (
-                    <div>
-                        <p className="px-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-4">Admin Extensions</p>
-                        <nav className="space-y-1">
-                            <Link
-                                href="/media"
-                                className={`
-                                    group flex items-center justify-between px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200
-                                    ${pathname?.startsWith('/media')
-                                        ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
-                                        : 'text-muted-foreground hover:bg-white/5 hover:text-foreground'}
-                                `}
-                            >
-                                <div className="flex items-center">
-                                    <ImageIcon
-                                        className={`
-                                            mr-3 flex-shrink-0 h-5 w-5 transition-colors
-                                            ${pathname?.startsWith('/media') ? 'text-primary-foreground' : 'text-muted-foreground group-hover:text-foreground'}
-                                        `}
-                                    />
-                                    Media Gallery
-                                </div>
-                                {pathname?.startsWith('/media') && <ChevronRight className="h-4 w-4" />}
-                            </Link>
-                        </nav>
-                    </div>
-                )}
             </div>
 
             <div className="p-4 space-y-2 border-t border-white/10">

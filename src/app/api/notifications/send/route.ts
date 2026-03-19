@@ -15,7 +15,7 @@ if (!admin.apps.length) {
 
 export async function POST(request: Request) {
     try {
-        const { userId, orderId, status } = await request.json();
+        const { userId, orderId, status, items } = await request.json();
 
         if (!userId || !orderId || !status) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -35,6 +35,11 @@ export async function POST(request: Request) {
             notification: {
                 title: 'Order Status Update',
                 body: `Your order #${orderId.substring(0, 8)} status has been updated to ${status}.`,
+            },
+            data: {
+                orderId: orderId,
+                status: status,
+                items: JSON.stringify(items || [])
             },
             token: fcmToken,
         };

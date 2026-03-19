@@ -22,7 +22,6 @@ export default function LoginPage() {
 
             if (result.success) {
                 sessionStorage.setItem('adminAuthenticated', 'true');
-                sessionStorage.setItem('superAdminAuthenticated', result.isSuperAdmin ? 'true' : 'false');
                 router.push('/');
             } else {
                 setError(result.error || 'Invalid master password');
