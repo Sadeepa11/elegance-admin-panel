@@ -4,13 +4,13 @@ import { getDatabase } from "firebase/database";
 import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDwXfrzsKa_o5Nfin6HbPPk9u7O5JPJgpw",
-    authDomain: "elegance-9d812.firebaseapp.com",
-    projectId: "elegance-9d812",
-    storageBucket: "elegance-9d812.firebasestorage.app",
-    messagingSenderId: "227820709837",
-    appId: "1:227820709837:web:c5fb4158d3c7102dee4684",
-    measurementId: "G-TV2B27W1NH"
+  apiKey: "AIzaSyD4KeTB42wT1bG9nAkOT11DTDinCO87vq0",
+  authDomain: "elegancenew-64a67.firebaseapp.com",
+  projectId: "elegancenew-64a67",
+  storageBucket: "elegancenew-64a67.firebasestorage.app",
+  messagingSenderId: "608776197551",
+  appId: "1:608776197551:web:0e0f1d4ddd455e62ad4b5a",
+  measurementId: "G-P2Z3F07KQW"
 };
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
